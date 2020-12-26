@@ -26,19 +26,22 @@ def get_cpu_temp():
 
 while True:
     humidity, temperature = Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)
-    temp = "Temp:     {0:0.1f}*F".format(((temperature * 1.8) + 32))
-    hum = "Humidity: {0:0.1f}%".format(humidity)
+    if temperature is not None:
+        temp = "Temp:     {0:0.1f}*F".format(((temperature * 1.8) + 32))
+    else: 
+        temp = "Temp: Read Err"
+    if humidity is not None:
+        hum = "Humidity: {0:0.1f}%".format(humidity)
+    else:
+        hum = "Humidity: Error"
     currTime = "Time:   " + time.strftime('%H:%M:%S', time.localtime(time.time()))
     cpuTemp = "CPU:      {0:0.1f}*C".format(get_cpu_temp()) 
     print(currTime + " " + temp + " " + hum + " " + cpuTemp)
 
-    if humidity is not None and temperature is not None:
-        with canvas(device) as draw:
-            draw.rectangle(device.bounding_box, outline="white", fill="black")
-            draw.text((15, 10), currTime, fill="white")
-            draw.text((15, 20), temp, fill="white")
-            draw.text((15, 30), hum, fill="white")
-            draw.text((15, 40), cpuTemp, fill="white")
-    else:
-        print("Failed to retrieve data from DHT22 sensor")
+    with canvas(device) as draw:
+        draw.rectangle(device.bounding_box, outline="white", fill="black")
+        draw.text((15, 10), currTime, fill="white")
+        draw.text((15, 20), temp, fill="white")
+        draw.text((15, 30), hum, fill="white")
+        draw.text((15, 40), cpuTemp, fill="white")
     sleep(10)
