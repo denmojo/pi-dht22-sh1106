@@ -1,0 +1,14 @@
+[Unit]
+Description=sh1106 display daemon
+
+[Service]
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/code/dht22_sensor
+ExecStart=/usr/bin/python3 test.py
+Restart=on-failure
+RestartSec=5
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
